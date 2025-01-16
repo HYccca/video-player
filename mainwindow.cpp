@@ -480,6 +480,18 @@ void MainWindow::loadTreeWidget()
     // 清空树形控件，但保留原有的顶级项
     history = nullptr;
     like = nullptr;
+       if (!history) {
+        history = new QTreeWidgetItem();
+        history->setText(0, "播放列表");
+        history->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        ui->treeWidget->addTopLevelItem(history);
+    }
+    if (!like) {
+        like = new QTreeWidgetItem();
+        like->setText(0, "收藏夹");
+        like->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        ui->treeWidget->addTopLevelItem(like);
+    }
     for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
         QTreeWidgetItem *item = ui->treeWidget->topLevelItem(i);
         if (item->text(0) == "播放列表") {
