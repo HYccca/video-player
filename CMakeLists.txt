@@ -23,6 +23,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(untitled8
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        aianalysis.h aianalysis.cpp aianalysis.ui
 
 
     )

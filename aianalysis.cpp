@@ -58,3 +58,4 @@ void AIanalysis::showEvent(QShowEvent *event)
     event->accept();
     emit changeenanbel(false);
 }
+

@@ -41,15 +41,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->speedbutton->setStyleSheet("QToolButton{background-color:transparent;}");
     ui->label_3->setStyleSheet("QLabel{background-color:transparent;}");
 
-    auto menu=new QMenu("璁?);
-    auto menutheme=new QMenu("涓婚");
+    auto menu=new QMenu("设");
+    auto menutheme=new QMenu("主题");
     auto themegroup=new QActionGroup(menutheme);
     themegroup->addAction(ui->actthemeblack);
     themegroup->addAction(ui->actthemewhite);
     menutheme->addAction(ui->actthemeblack);
     menutheme->addAction(ui->actthemewhite);
-    auto menubofang=new QMenu("鎾斁");
-    auto menuhot=new QMenu("鐑敭");
+    auto menubofang=new QMenu("播放");
+    auto menuhot=new QMenu("热键");
     menu->addMenu(menutheme);
     menu->addMenu(menubofang);
     menu->addMenu(menuhot);
@@ -65,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolButton_2->setMenu(menubofang);
 
 
-    auto menuspeed=new QMenu("鍊嶉€熸挱鏀?);
+    auto menuspeed=new QMenu("倍速播放");
     auto speedgroup=new QActionGroup(menuspeed);
     menuspeed->addAction(ui->action1_0);
     menuspeed->addAction(ui->action1_5);
@@ -117,7 +117,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
         QString ex=fileinfo.suffix().toUpper();
         if(ex=="MOV"||ex=="JPG")
         {
-            event->acceptProposedAction();//鎺ュ彈杩欎釜涓滆タ杩涙潵
+            event->acceptProposedAction();//接受这个东西进来
         }
         else
         {
@@ -135,7 +135,7 @@ void MainWindow::on_action1_0_triggered(bool checked)
     {
         ui->speedbutton->setText("X1.0");
     }
-    //鍑芥暟
+    //函数
 }
 
 
@@ -145,7 +145,7 @@ void MainWindow::on_action1_5_triggered(bool checked)
     {
         ui->speedbutton->setText("X1.5");
     }
-    //鍑芥暟
+    //函数
 }
 
 
@@ -155,7 +155,7 @@ void MainWindow::on_action0_5_triggered(bool checked)
     {
         ui->speedbutton->setText("X0.5");
     }
-    //鍑芥暟
+    //函数
 }
 
 
@@ -165,7 +165,7 @@ void MainWindow::on_action2_0_triggered(bool checked)
     {
         ui->speedbutton->setText("X2.0");
     }
-    //鍑芥暟
+    //函数
 }
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
@@ -191,8 +191,8 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             {
                 return QWidget::eventFilter(watched,event);
             }
-            QString dlgtitle="鍒犻櫎";
-            QString strinfo="鏄惁鍒犻櫎";
+            QString dlgtitle="删除";
+            QString strinfo="是否删除";
             int result=QMessageBox::question(this,dlgtitle,strinfo,
                                                QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,
                                                QMessageBox::NoButton);
@@ -233,7 +233,7 @@ void MainWindow::on_addfolder_triggered()
     QFileInfoList fileList = directory.entryInfoList(QStringList("*.MOV"), QDir::Files | QDir::NoDotAndDotDot);
     foreach (QFileInfo fileInfo, fileList)
     {
-        // 涓烘瘡涓?.mp3 鏂囦欢鍒涘缓涓€涓柊鐨?QTreeWidgetItem
+        // 为每个 .mp3 文件创建一个新的 QTreeWidgetItem
         QTreeWidgetItem *fileItem = new QTreeWidgetItem(itvedio);
         fileItem->setText(0, fileInfo.fileName());
         fileItem->setText(1,fileInfo.lastRead().toString(("yyyy-MM-dd")));
@@ -247,7 +247,7 @@ void MainWindow::on_addfolder_triggered()
 
 void MainWindow::on_addfile_triggered()
 {
-    QStringList files=QFileDialog::getOpenFileNames(this,"閫夋嫨鏂囦欢","","瑙嗛鏂囦欢(*.MOV *.JPG)");
+    QStringList files=QFileDialog::getOpenFileNames(this,"选择文件","","视频文件(*.MOV *.JPG)");
     if(files.isEmpty())return;
 
     QTreeWidgetItem *paritem,*item;
@@ -260,7 +260,7 @@ void MainWindow::on_addfile_triggered()
         paritem=item;
     for(int i=0;i<files.size();i++)
     {
-        //鏂囦欢杞藉叆
+        //文件载入
         QString filename=files.at(i);
         QFileInfo fileinfo(filename);
         QString nodetext=fileinfo.fileName();
@@ -269,7 +269,7 @@ void MainWindow::on_addfile_triggered()
         {
             if(history->child(j)->text(0)==nodetext)
             {
-                QMessageBox::information(this,"鎻愮ず",QString("鏂囦欢%1閲嶅锛屽凡璺宠繃").arg(nodetext));
+                QMessageBox::information(this,"提示",QString("文件%1重复，已跳过").arg(nodetext));
                 skip=true;
                 break;
             }
@@ -281,7 +281,7 @@ void MainWindow::on_addfile_triggered()
         item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
         item->setData(0,Qt::UserRole,QVariant(filename));
         paritem->addChild(item);
-        //鍥剧墖鏄剧ず
+        //图片显示
         m_pixmap.load(filename);
         int w=ui->label->width();
         int realw=m_pixmap.width();
@@ -311,7 +311,7 @@ void MainWindow::dropEvent(QDropEvent *event)
     {
         if(history->child(j)->text(0)==nodetext)
         {
-            QMessageBox::information(this,"鎻愮ず",QString("鏂囦欢%1閲嶅锛屽凡璺宠繃").arg(nodetext));
+            QMessageBox::information(this,"提示",QString("文件%1重复，已跳过").arg(nodetext));
             return ;
         }
     }
@@ -365,7 +365,7 @@ void MainWindow::on_actshun_triggered(bool checked)
 {
     if(checked)
     {
-        ui->toolButton_2->setText("椤哄簭鎾斁");
+        ui->toolButton_2->setText("顺序播放");
     }
 }
 
@@ -373,7 +373,7 @@ void MainWindow::on_actxun_triggered(bool checked)
 {
     if(checked)
     {
-        ui->toolButton_2->setText("寰幆鎾斁");
+        ui->toolButton_2->setText("循环播放");
     }
 }
 
@@ -381,7 +381,7 @@ void MainWindow::on_actrandom_triggered(bool checked)
 {
     if(checked)
     {
-        ui->toolButton_2->setText("闅忔満鎾斁");
+        ui->toolButton_2->setText("随机播放");
     }
 }
 
@@ -437,16 +437,16 @@ void MainWindow::changetheme(int n)
 
     switch (n) {
     case musicnow:
-        ui->label->setText("鏇存崲浜嗕笌褰撳墠闊充箰鍖归厤鐨勪富棰?);
+        ui->label->setText("更换了与当前音乐匹配的主题");
         break;
     case musiclike:
-        ui->label->setText("鏇存崲浜嗕笌浣犲枩娆㈢殑闊充箰鍖归厤鐨勪富棰?);
+        ui->label->setText("更换了与你喜欢的音乐匹配的主题");
         break;
     case videonow:
-        ui->label->setText("鏇存崲浜嗕笌褰撳墠瑙嗛鍖归厤鐨勪富棰?);
+        ui->label->setText("更换了与当前视频匹配的主题");
         break;
     case videolike:
-        ui->label->setText("鏇存崲浜嗕笌浣犲枩娆㈢殑瑙嗛鍖归厤鐨勪富棰?);
+        ui->label->setText("更换了与你喜欢的视频匹配的主题");
         break;
     }
     analysis->close();
@@ -457,10 +457,10 @@ void MainWindow::loadTreeWidget()
     if(!file.open(QIODevice::ReadOnly))
     {
         QTreeWidgetItem *history=new QTreeWidgetItem(ittop);
-        history->setText(0,"鎾斁鍒楄〃");
+        history->setText(0,"播放列表");
         history->setFlags(Qt::ItemIsSelectable|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
         like=new QTreeWidgetItem(ittop);
-        like->setText(0,"鏀惰棌澶?);
+        like->setText(0,"收藏夹");
         like->setFlags(Qt::ItemIsSelectable|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
         ui->treeWidget->addTopLevelItem(history);
         ui->treeWidget->addTopLevelItem(like);
@@ -477,14 +477,14 @@ void MainWindow::loadTreeWidget()
 
     ui->treeWidget->header()->restoreState(headerState);
 
-    // 娓呯┖鏍戝舰鎺т欢锛屼絾淇濈暀鍘熸湁鐨勯《绾ч」
+    // 清空树形控件，但保留原有的顶级项
     history = nullptr;
     like = nullptr;
     for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
         QTreeWidgetItem *item = ui->treeWidget->topLevelItem(i);
-        if (item->text(0) == "鎾斁鍒楄〃") {
+        if (item->text(0) == "播放列表") {
             history = item;
-        } else if (item->text(0) == "鏀惰棌澶?) {
+        } else if (item->text(0) == "收藏夹") {
             like = item;
         }
     }
@@ -494,7 +494,7 @@ void MainWindow::loadTreeWidget()
     {
         QTreeWidgetItem *item=ui->treeWidget->topLevelItem(i);
         loaditem(in,item);
-        if (item->text(0) != "鎾斁鍒楄〃" && item->text(0) != "鏀惰棌澶?) {
+        if (item->text(0) != "播放列表" && item->text(0) != "收藏夹") {
 
             ui->treeWidget->addTopLevelItem(item);
         }
@@ -509,7 +509,7 @@ void MainWindow::loaditem(QDataStream &in,QTreeWidgetItem *item)
     Qt::ItemFlags flags;
     in>>text;
     in>>childCount;
-    in>>flags; // 璇诲彇椤圭殑灞炴€?
+    in>>flags; // 读取项的属性
     in>>filepath;
     QFileInfo fileinfo(filepath);
     item->setText(0,text);
@@ -537,8 +537,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     QDataStream out(&file);
     QSet<QString> likelist;
-    out << ui->treeWidget->header()->saveState(); // 淇濆瓨琛ㄥご鐘舵€?
-    out << ui->treeWidget->topLevelItemCount();   // 淇濆瓨椤剁骇椤圭殑鏁伴噺
+    out << ui->treeWidget->header()->saveState(); // 保存表头状态
+    out << ui->treeWidget->topLevelItemCount();   // 保存顶级项的数量
     for(int i=0;i<like->childCount();i++)
     {
         QTreeWidgetItem *child=like->child(i);
@@ -548,7 +548,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
         QTreeWidgetItem *item = ui->treeWidget->topLevelItem(i);
-        saveItem(out, item); // 閫掑綊淇濆瓨姣忎釜椤?
+        saveItem(out, item); // 递归保存每个项
     }
 
     file.close();
@@ -556,11 +556,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 void MainWindow::saveItem(QDataStream &out, QTreeWidgetItem *item)
 {
-    out << item->text(0) << item->childCount() << item->flags()<<item->data(0,Qt::UserRole).toString(); // 淇濆瓨椤圭殑灞炴€?
+    out << item->text(0) << item->childCount() << item->flags()<<item->data(0,Qt::UserRole).toString(); // 保存项的属性
 
     for (int j = 0; j < item->childCount(); ++j) {
         QTreeWidgetItem *child = item->child(j);
-        saveItem(out, child); // 閫掑綊淇濆瓨瀛愰」
+        saveItem(out, child); // 递归保存子项
     }
 }
 
@@ -575,12 +575,12 @@ void MainWindow::on_treeWidget_customContextMenuRequested(const QPoint &pos)
             contextMenu->exec(globalPos);
             if(state[item])
             {
-                ui->actlike->setText("鍙栨秷鏀惰棌");
+                ui->actlike->setText("取消收藏");
                 ui->pushButton_6->setChecked(true);
             }
             else
             {
-                ui->actlike->setText("娣诲姞鏀惰棌");
+                ui->actlike->setText("添加收藏");
                 ui->pushButton_6->setChecked(false);
             }
 
@@ -595,8 +595,8 @@ void MainWindow::on_delete_2_triggered()
     {
         return ;
     }
-    QString dlgtitle="鍒犻櫎";
-    QString strinfo="鏄惁鍒犻櫎";
+    QString dlgtitle="删除";
+    QString strinfo="是否删除";
     int result=QMessageBox::question(this,dlgtitle,strinfo,
                                        QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,
                                        QMessageBox::NoButton);
@@ -621,7 +621,7 @@ void MainWindow::on_pushButton_6_clicked()
     if(state[item]==false)
 
     {
-        //鏂囦欢杞藉叆
+        //文件载入
         QString filename=item->data(0,Qt::UserRole).toString();
         QFileInfo fileinfo(filename);
         QString nodetext=fileinfo.fileName();
@@ -663,7 +663,7 @@ void MainWindow::on_actlike_triggered()
     if(state[item]==false)
 
     {
-        //鏂囦欢杞藉叆
+        //文件载入
         QString filename=item->data(0,Qt::UserRole).toString();
         QFileInfo fileinfo(filename);
         QString nodetext=fileinfo.fileName();
@@ -706,11 +706,12 @@ void MainWindow::on_rename_triggered()
 
     QString filename = item->data(0, Qt::UserRole).toString();
     QFileInfo fileInfo(filename);
-    QString extension = fileInfo.suffix(); // 鑾峰彇鏂囦欢鎵╁睍鍚?
-    QString newname = QInputDialog::getText(this, "閲嶅懡鍚?, "璇疯緭鍏ユ柊鍚嶇О", QLineEdit::Normal, item->text(0));
+    QString extension = fileInfo.suffix(); // 获取文件扩展名
+    QString newname = QInputDialog::getText(this, "重命名", "请输入新名称", QLineEdit::Normal, item->text(0));
     if (!newname.isEmpty()) {
         {
-            QMessageBox::warning(this, "閲嶅懡鍚嶅け璐?, "鏃犳硶閲嶅懡鍚嶆枃浠躲€傝妫€鏌ユ枃浠跺悕鏄惁鏈夋晥鎴栨枃浠舵槸鍚﹁鍗犵敤銆?);
+            QMessageBox::warning(this, "重命名失败", "无法重命名文件。请检查文件名是否有效或文件是否被占用。");
         }
     }
 }
+
