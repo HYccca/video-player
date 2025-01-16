@@ -22,7 +22,7 @@
 #include<QTreeWidget>
 #include<QInputDialog>
 #include"aianalysis.h"
-#include<QDataStream>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -420,7 +420,7 @@ void MainWindow::on_pushButton_clicked()
 {
     analysis=new AIanalysis(this);
     analysis->setAttribute(Qt::WA_DeleteOnClose);
-    analysis->setWindowFlag(Qt::WindowStaysOnBottomHint);
+    //analysis->setWindowFlag(Qt::WindowStaysOnBottomHint);
     connect(analysis,&AIanalysis::changeenanbel,this,&MainWindow::do_setenabled);
     connect(analysis,&AIanalysis::theme,this,&MainWindow::changetheme);
     analysis->show();
@@ -456,7 +456,7 @@ void MainWindow::loadTreeWidget()
     QFile file("treewidget.state");
     if(!file.open(QIODevice::ReadOnly))
     {
-        QTreeWidgetItem *history=new QTreeWidgetItem(ittop);
+        history=new QTreeWidgetItem(ittop);
         history->setText(0,"播放列表");
         history->setFlags(Qt::ItemIsSelectable|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
         like=new QTreeWidgetItem(ittop);
@@ -465,53 +465,56 @@ void MainWindow::loadTreeWidget()
         ui->treeWidget->addTopLevelItem(history);
         ui->treeWidget->addTopLevelItem(like);
         ui->treeWidget->setCurrentItem(history);
-    }
-
-    QDataStream in(&file);
-    QByteArray headerState;
-    int toplevelitemcount;
-
-    in>>headerState;
-    in>>toplevelitemcount;
-    in>>likelist;
-
-    ui->treeWidget->header()->restoreState(headerState);
-
-    // 清空树形控件，但保留原有的顶级项
-    history = nullptr;
-    like = nullptr;
-       if (!history) {
-        history = new QTreeWidgetItem();
-        history->setText(0, "播放列表");
-        history->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        ui->treeWidget->addTopLevelItem(history);
-    }
-    if (!like) {
-        like = new QTreeWidgetItem();
-        like->setText(0, "收藏夹");
-        like->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        ui->treeWidget->addTopLevelItem(like);
-    }
-    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
-        QTreeWidgetItem *item = ui->treeWidget->topLevelItem(i);
-        if (item->text(0) == "播放列表") {
-            history = item;
-        } else if (item->text(0) == "收藏夹") {
-            like = item;
-        }
-    }
-
-
-    for(int i=0;i<toplevelitemcount;i++)
+    }else
     {
-        QTreeWidgetItem *item=ui->treeWidget->topLevelItem(i);
-        loaditem(in,item);
-        if (item->text(0) != "播放列表" && item->text(0) != "收藏夹") {
+        QDataStream in(&file);
+        QByteArray headerState;
+        int toplevelitemcount;
 
-            ui->treeWidget->addTopLevelItem(item);
+        in>>headerState;
+        in>>toplevelitemcount;
+        in>>likelist;
+
+        ui->treeWidget->header()->restoreState(headerState);
+
+        // 清空树形控件，但保留原有的顶级项
+        history = nullptr;
+        like = nullptr;
+        if (!history) {
+            history = new QTreeWidgetItem();
+            history->setText(0, "播放列表");
+            history->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+            ui->treeWidget->addTopLevelItem(history);
         }
+        if (!like) {
+            like = new QTreeWidgetItem();
+            like->setText(0, "收藏夹");
+            like->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+            ui->treeWidget->addTopLevelItem(like);
+        }
+        for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
+            QTreeWidgetItem *item = ui->treeWidget->topLevelItem(i);
+            if (item->text(0) == "播放列表") {
+                history = item;
+            } else if (item->text(0) == "收藏夹") {
+                like = item;
+            }
+        }
+
+
+        for(int i=0;i<toplevelitemcount;i++)
+        {
+            QTreeWidgetItem *item=ui->treeWidget->topLevelItem(i);
+            loaditem(in,item);
+            if (item->text(0) != "播放列表" && item->text(0) != "收藏夹") {
+
+                ui->treeWidget->addTopLevelItem(item);
+            }
+        }
+        file.close();
     }
-    file.close();
+
+
 }
 void MainWindow::loaditem(QDataStream &in,QTreeWidgetItem *item)
 {
