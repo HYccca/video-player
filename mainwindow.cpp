@@ -396,5 +396,6 @@ void MainWindow::on_pushButton_6_clicked()
     item1->setData(0,Qt::UserRole,QVariant(filename));
     paritem->addChild(item1);
     paritem->setExpanded(true);
+    ////
 }
 
